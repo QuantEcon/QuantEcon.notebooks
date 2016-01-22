@@ -20,5 +20,3 @@ Any notebooks that require dependencies to run should locate these in the ``depe
 
 There is a simple `fetch utility <http://quanteconpy.readthedocs.org/en/latest/util/notebooks.html>`__ built into the python ``quantecon`` package. 
 
-
-
