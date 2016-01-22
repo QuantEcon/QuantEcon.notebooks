@@ -36,9 +36,10 @@ RUN wget --quiet https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.s
 RUN bash Anaconda3-2.4.1-Linux-x86_64.sh -b && rm Anaconda3-2.4.1-Linux-x86_64.sh
 ENV PATH $HOME/anaconda3/bin:$PATH
 RUN /bin/bash -c "ipython kernelspec install-self --user"
+RUN conda update conda --yes && conda update anaconda --yes
 
 #-Install Pip Packages
-RUN pip install quantecon
+RUN pip install quantecon && pip install pymc && pip install seaborn
 
 #-Julia Packages-#
 RUN echo "cacert=/etc/ssl/certs/ca-certificates.crt" > ~/.curlrc
@@ -51,3 +52,4 @@ RUN julia -e 'Pkg.add("QuantEcon"); using QuantEcon'
 RUN julia -e 'Pkg.add("Gadfly"); using Gadfly'
 RUN julia -e 'Pkg.add("Optim"); using Optim'
 RUN julia -e 'Pkg.add("Grid"); using Grid'
+RUN julia -e 'Pkg.add("Roots"); using Roots'
