@@ -37,9 +37,11 @@ RUN bash Anaconda3-2.4.1-Linux-x86_64.sh -b && rm Anaconda3-2.4.1-Linux-x86_64.s
 ENV PATH $HOME/anaconda3/bin:$PATH
 RUN /bin/bash -c "ipython kernelspec install-self --user"
 RUN conda update conda --yes && conda update anaconda --yes
+RUN conda install pymc && conda install seaborn
 
 #-Install Pip Packages
-RUN pip install quantecon && pip install pymc && pip install seaborn
+RUN pip install --upgrade pip
+RUN pip install quantecon
 
 #-Julia Packages-#
 RUN echo "cacert=/etc/ssl/certs/ca-certificates.crt" > ~/.curlrc
