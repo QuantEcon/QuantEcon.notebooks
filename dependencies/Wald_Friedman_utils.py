@@ -22,7 +22,23 @@ import quantecon as qe
 
 class WaldFriedman(object):
     """
-    Insert relevant docstrings here
+    This class is used to solve the problem presented in the "Wald Friedman"
+    notebook presented on the QuantEcon website.
+
+    Parameters
+    ----------
+    c : scalar(Float64)
+        Cost of postponing decision
+    L0 : scalar(Float64)
+        Cost of choosing model 0 when the truth is model 1
+    L1 : scalar(Float64)
+        Cost of choosing model 1 when the truth is model 0
+    f0 : array_like(Float64)
+        A finite state probability distribution
+    f1 : array_like(Float64)
+        A finite state probability distribution
+    m : scalar(Int)
+        Number of points to use in function approximation
     """
     def __init__(self, c, L0, L1, f0, f1, m=25):
         self.c = c
@@ -123,7 +139,7 @@ class WaldFriedman(object):
         Evaluates the value function for a given continuation value
         function; that is, evaluates
 
-            J(p) = min(pL0, (1-p)L1, c + E[J(p')])
+            J(p) = min( (1-p)L0, pL1, c + E[J(p')])
 
         Uses linear interpolation between points
         """
@@ -146,9 +162,9 @@ class WaldFriedman(object):
 
         return J_out
 
-    def solve_model(self):
+    def solve_model(self, tol=1e-7):
         J =  qe.compute_fixed_point(self.bellman_operator, np.zeros(self.m),
-                                    error_tol=1e-7, verbose=False)
+                                    error_tol=tol, verbose=False)
 
         self.J = J
         return J
@@ -321,8 +337,8 @@ def WaldFriedman_Interactive(m):
     ax.set_ylim(0, 0.5 * max(L0, L1))
     ax.plot(wf.pgrid, J)
 
-    ax.annotate(r"$\rho_2$", xy=(ub+0.025, 0.5), size=14)
-    ax.annotate(r"$\rho_1$", xy=(lb+0.025, 0.5), size=14)
+    ax.annotate(r"$\beta$", xy=(ub+0.025, 0.5), size=14)
+    ax.annotate(r"$\alpha$", xy=(lb+0.025, 0.5), size=14)
     ax.vlines(lb, 0.0, wf.payoff_choose_f1(lb), linestyle="--")
     ax.vlines(ub, 0.0, wf.payoff_choose_f0(ub), linestyle="--")
 
@@ -355,15 +371,15 @@ def all_param_interact(c, L0, L1, a0, b0, a1, b1, m):
     ax[0, 0].set_title("Distributions over Outcomes", size=24)
 
     ax[0, 1].plot(wf.pgrid, J)
-    ax[0, 1].annotate(r"$\rho_1$", xy=(lb+0.025, 0.5), size=14)
-    ax[0, 1].annotate(r"$\rho_2$", xy=(ub+0.025, 0.5), size=14)
+    ax[0, 1].annotate(r"$\alpha$", xy=(lb+0.025, 0.5), size=14)
+    ax[0, 1].annotate(r"$\beta$", xy=(ub+0.025, 0.5), size=14)
     ax[0, 1].vlines(lb, 0.0, wf.payoff_choose_f1(lb), linestyle="--")
     ax[0, 1].vlines(ub, 0.0, wf.payoff_choose_f0(ub), linestyle="--")
     ax[0, 1].set_ylim(0, 0.5*max(L0, L1))
     ax[0, 1].set_ylabel("Value of Bellman")
     ax[0, 1].set_xlabel(r"$p_k$")
     ax[0, 1].set_title("Bellman Equation", size=24)
-    
+
     ax[1, 0].hist(tdist, bins=np.max(tdist))
     ax[1, 0].set_title("Stopping Times", size=24)
     ax[1, 0].set_xlabel("Time")
