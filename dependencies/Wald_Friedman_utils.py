@@ -344,6 +344,7 @@ def WaldFriedman_Interactive(m):
 
     fig.show()
 
+
 def all_param_interact(c, L0, L1, a0, b0, a1, b1, m):
     f0 = np.clip(st.beta.pdf(np.linspace(0, 1, m), a=a0, b=b0), 1e-6, np.inf)
     f0 = f0 / np.sum(f0)
@@ -376,24 +377,30 @@ def all_param_interact(c, L0, L1, a0, b0, a1, b1, m):
     ax[0, 1].vlines(lb, 0.0, wf.payoff_choose_f1(lb), linestyle="--")
     ax[0, 1].vlines(ub, 0.0, wf.payoff_choose_f0(ub), linestyle="--")
     ax[0, 1].set_ylim(0, 0.5*max(L0, L1))
-    ax[0, 1].set_ylabel("Value of Bellman")
+    ax[0, 1].set_ylabel("Loss")
     ax[0, 1].set_xlabel(r"$p_k$")
-    ax[0, 1].set_title("Bellman Equation", size=24)
+    ax[0, 1].set_title("Loss Function", size=24)
 
     ax[1, 0].hist(tdist, bins=np.max(tdist))
     ax[1, 0].set_title("Stopping Times", size=24)
     ax[1, 0].set_xlabel("Time")
     ax[1, 0].set_ylabel("Density")
 
-    ax[1, 1].hist(cdist, bins=2)
-    ax[1, 1].set_title("Correct Decisions", size=24)
+    _N, _bins, _patches = ax[1, 1].hist(cdist.astype(int), bins=2)
+    _patches[0].set_facecolor("DarkRed")
+    _patches[1].set_facecolor("DarkGreen")
+    ax[1, 1].set_title("Correct and Incorrect Counts", size=24)
+    ax[1, 1].set_xticks([0.25, 0.75])
+    ax[1, 1].set_xticklabels(["Incorrect", "Correct"], size=18)
     ax[1, 1].annotate("Percent Correct p={}".format(np.mean(cdist)), xy=(0.05, ndraws/2), size=18)
 
     fig.tight_layout()
     fig.show()
 
+
 def convert_rgb(x):
     return tuple(map(lambda c: int(256*c), x))
+
 
 def convert_rgb_hex(rgb):
     if isinstance(rgb[0], int):
