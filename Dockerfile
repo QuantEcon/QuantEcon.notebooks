@@ -32,8 +32,8 @@ USER main
 #-If this get's updated then the following instructions will break. 
 #-TODO: This step can be removed once the base image is upgraded to python=3.5
 
-RUN wget --quiet https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda3-2.4.1-Linux-x86_64.sh
-RUN bash Anaconda3-2.4.1-Linux-x86_64.sh -b && rm Anaconda3-2.4.1-Linux-x86_64.sh
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh
+RUN bash Anaconda3-2022.05-Linux-x86_64.sh -b && rm Anaconda3-2022.05-Linux-x86_64.sh
 ENV PATH $HOME/anaconda3/bin:$PATH
 RUN /bin/bash -c "ipython kernelspec install-self --user"
 RUN conda update conda --yes && conda update anaconda --yes
