@@ -10,7 +10,7 @@ USER root
 
 #-Update Debian Base-#
 RUN apt-get update -y
-RUN apt-get install -y --no-install-recommends curl ca-certificates hdf5-tools
+RUN apt-get install -y --no-install-recommends curl ca-certificates hdf5-tools wget tar
 
 #-Install texlive-#
 RUN apt-get update -y && apt-get install -yq --no-install-recommends \
