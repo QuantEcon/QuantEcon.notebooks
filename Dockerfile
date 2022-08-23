@@ -2,7 +2,7 @@
 # User: main
 # Environments: Python3.5 and Julia0.3
 
-FROM ubuntu:latest
+FROM debian:latest
 
 MAINTAINER Matthew McKay <mamckay@gmail.com>
 
