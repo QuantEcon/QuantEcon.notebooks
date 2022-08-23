@@ -21,10 +21,7 @@ RUN apt-get update -y && apt-get install -yq --no-install-recommends \
     && apt-get clean
 
 # Julia dependencies
-RUN apt-get install -y --no-install-recommends julia libnettle4 && apt-get clean
-
-#-Re-Install Conda for Python3.5 Anaconda Distributions-#
-RUN rm -r /home/main/anaconda
+RUN apt-get install -y --no-install-recommends julia && apt-get clean
 
 USER main
 
