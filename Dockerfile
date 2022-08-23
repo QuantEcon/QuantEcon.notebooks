@@ -2,7 +2,7 @@
 # User: main
 # Environments: Python3.5 and Julia0.3
 
-FROM debian:latest
+FROM ubuntu:latest
 
 MAINTAINER Matthew McKay <mamckay@gmail.com>
 
@@ -22,6 +22,8 @@ RUN apt-get update -y && apt-get install -yq --no-install-recommends \
 
 # Julia dependencies
 RUN apt-get install -y --no-install-recommends julia && apt-get clean
+
+RUN useradd -r main
 
 USER main
 
