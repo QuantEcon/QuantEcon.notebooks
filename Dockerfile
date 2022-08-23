@@ -21,7 +21,10 @@ RUN apt-get update -y && apt-get install -yq --no-install-recommends \
     && apt-get clean
 
 # Julia dependencies
-RUN apt-get install -y --no-install-recommends julia && apt-get clean
+RUN wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.0-linux-x86_64.tar.gz
+RUN tar -xvzf julia-1.8.0-linux-x86_64.tar.gz
+RUN cp -r julia-1.8.0 /opt/
+RUN ln -s /opt/julia-1.8.0/bin/julia /usr/local/bin/julia
 
 RUN useradd -r main
 
