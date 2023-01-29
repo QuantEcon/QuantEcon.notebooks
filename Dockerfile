@@ -2,7 +2,7 @@
 # User: main
 # Environments: Python3.5 and Julia0.3
 
-FROM andrewosh/binder-base
+FROM debian:latest
 
 MAINTAINER Matthew McKay <mamckay@gmail.com>
 
@@ -10,7 +10,7 @@ USER root
 
 #-Update Debian Base-#
 RUN apt-get update -y
-RUN apt-get install -y --no-install-recommends curl ca-certificates hdf5-tools
+RUN apt-get install -y --no-install-recommends curl ca-certificates hdf5-tools wget tar
 
 #-Install texlive-#
 RUN apt-get update -y && apt-get install -yq --no-install-recommends \
@@ -21,10 +21,12 @@ RUN apt-get update -y && apt-get install -yq --no-install-recommends \
     && apt-get clean
 
 # Julia dependencies
-RUN apt-get install -y --no-install-recommends julia libnettle4 && apt-get clean
+RUN wget --quiet https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.0-linux-x86_64.tar.gz
+RUN tar -xvzf julia-1.8.0-linux-x86_64.tar.gz
+RUN cp -r julia-1.8.0 /opt/
+RUN ln -s /opt/julia-1.8.0/bin/julia /usr/local/bin/julia
 
-#-Re-Install Conda for Python3.5 Anaconda Distributions-#
-RUN rm -r /home/main/anaconda
+RUN useradd -r main
 
 USER main
 
@@ -32,8 +34,8 @@ USER main
 #-If this get's updated then the following instructions will break. 
 #-TODO: This step can be removed once the base image is upgraded to python=3.5
 
-RUN wget --quiet https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda3-2.4.1-Linux-x86_64.sh
-RUN bash Anaconda3-2.4.1-Linux-x86_64.sh -b && rm Anaconda3-2.4.1-Linux-x86_64.sh
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh
+RUN bash Anaconda3-2022.05-Linux-x86_64.sh -b && rm Anaconda3-2022.05-Linux-x86_64.sh
 ENV PATH $HOME/anaconda3/bin:$PATH
 RUN /bin/bash -c "ipython kernelspec install-self --user"
 RUN conda update conda --yes && conda update anaconda --yes
